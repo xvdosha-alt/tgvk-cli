@@ -1,0 +1,20 @@
+.venv/
+__pycache__/
+*.py[cod]
+*.pyc
+*.egg-info/
+dist/
+build/
+.DS_Store
+Thumbs.db
+
+# Local runtime data
+serv/data/
+*.db
+*.sqlite3
+
+# Secrets (never commit)
+.env
+.env.*
+config.json
+

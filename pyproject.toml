@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tgvk"
+version = "0.1.0"
+description = "CLI: дублирование Telegram → VK бот с управлением через VK"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "telethon>=1.36.0",
+    "vkbottle>=4.3.12",
+    "typer>=0.12.0",
+    "rich>=13.7.0",
+    "pydantic>=2.6.0",
+    "pydantic-settings>=2.2.0",
+    "aiosqlite>=0.20.0",
+    "pillow>=10.2.0",
+    "httpx>=0.27.0",
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "python-multipart>=0.0.12",
+    "cryptography>=42.0.0",
+    "qrcode>=8.0",
+]
+
+[project.scripts]
+tgvk = "tgvk.cli:app"
+
+[tool.hatch.build.targets.wheel]
+packages = ["tgvk", "serv"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"serv/static" = "serv/static"
