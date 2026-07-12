@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>tgvk</title>
+  <link rel="icon" href="/static/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/static/favicon.svg">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 24 24"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.2 6.5 3.6L12 11.4 5.5 7.8 12 4.2ZM5 9.1l6.5 3.6v7.3L5 16.4V9.1Zm14 0v7.3l-6.5 3.6v-7.3L19 9.1Z"/></svg>
+        </div>
+        <div class="brand">
+          <h1>tgvk</h1>
+          <p>Telegram → VK мост</p>
+        </div>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <div id="alert" class="alert hidden" role="alert"></div>
+
+      <section id="auth-section" class="card hidden">
+        <div class="card-head">
+          <span class="bar"></span>
+          <h2>Вход в Telegram</h2>
+        </div>
+        <p class="hint" id="auth-hint">Введи номер — код придёт в Telegram.</p>
+
+        <div id="auth-tabs" class="auth-tabs hidden">
+          <button type="button" id="tab-qr" class="auth-tab active">QR-код</button>
+          <button type="button" id="tab-phone" class="auth-tab">Номер телефона</button>
+        </div>
+
+        <form id="form-qr" class="step hidden">
+          <div class="qr-wrap">
+            <img id="qr-image" class="qr-image" alt="QR-код для входа в Telegram" width="220" height="220">
+            <p class="qr-hint">
+              Открой Telegram на телефоне → <strong>Настройки</strong> → <strong>Устройства</strong>
+              → <strong>Подключить устройство</strong> → отсканируй код.
+            </p>
+          </div>
+          <button type="button" id="btn-qr-refresh" class="secondary">Обновить QR</button>
+        </form>
+
+        <form id="form-phone" class="step">
+          <label for="phone">Номер телефона</label>
+          <input type="tel" id="phone" placeholder="+79991234567" autocomplete="tel" required>
+          <button type="submit" class="primary">Получить код</button>
+        </form>
+
+        <form id="form-code" class="step hidden">
+          <label for="code">Код из Telegram</label>
+          <input type="text" id="code" placeholder="12345" inputmode="numeric" autocomplete="one-time-code" required>
+          <button type="submit" class="primary">Подтвердить</button>
+        </form>
+
+        <form id="form-password" class="step hidden">
+          <label for="password">Пароль 2FA</label>
+          <input type="password" id="password" placeholder="Пароль" autocomplete="current-password" required>
+          <button type="submit" class="primary">Войти</button>
+        </form>
+      </section>
+
+      <section id="panel-section" class="card hidden">
+        <div class="card-head">
+          <span class="bar"></span>
+          <h2>Панель управления</h2>
+        </div>
+
+        <div class="status-row">
+          <div>
+            <div class="label">Telegram</div>
+            <div id="tg-info" class="value">—</div>
+          </div>
+          <div>
+            <div class="label">Сервис</div>
+            <div id="service-status" class="badge off">остановлен</div>
+          </div>
+        </div>
+
+        <p class="hint vk-bot-hint">
+          Для работы с ботом напиши ему в личку:
+          <a href="https://vk.com/xvtgcli" target="_blank" rel="noopener noreferrer">vk.com/xvtgcli</a>
+          — любое сообщение, чтобы открыть диалог.
+        </p>
+
+        <form id="form-settings" class="settings">
+          <label for="vk-peer-id">VK peer_id</label>
+          <input type="number" id="vk-peer-id" placeholder="123456789" min="1">
+
+          <label class="check">
+            <input type="checkbox" id="use-default-vk">
+            Использовать общий VK токен
+          </label>
+
+          <div id="vk-token-wrap" class="vk-token-wrap hidden">
+            <label for="vk-token">VK токен <span class="opt">опционально</span></label>
+            <input type="password" id="vk-token" placeholder="Токен сообщества" autocomplete="off">
+          </div>
+
+          <label class="check">
+            <input type="checkbox" id="img-mode">
+            Img mode
+          </label>
+
+          <button type="submit" class="secondary">Сохранить</button>
+        </form>
+
+        <div class="actions">
+          <button id="btn-start" class="primary">Запустить</button>
+          <button id="btn-stop" class="danger">Остановить</button>
+          <button id="btn-logout" class="ghost">Выйти из Telegram</button>
+        </div>
+
+      </section>
+    </main>
+  </div>
+  <script src="/static/app.js?v=5"></script>
+</body>
+</html>
