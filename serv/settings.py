@@ -11,8 +11,6 @@ USERS_DIR = DATA_DIR / "users"
 COOKIE_NAME = "tgvk_sid"
 COOKIE_MAX_AGE = 60 * 60 * 24 * 30
 SESSION_IDLE_TIMEOUT = int(os.environ.get("TGVK_SESSION_IDLE_SEC", str(60 * 30)))
-DEFAULT_PUBLIC_HOST = "tg.vk.cli.dosha.pw"
-DEFAULT_PUBLIC_URL = f"https://{DEFAULT_PUBLIC_HOST}"
 LOCAL_PANEL_URL = "http://127.0.0.1:8080"
 
 
@@ -41,10 +39,7 @@ def default_bind_host() -> str:
 
 
 def trusted_hosts() -> list[str]:
-    raw = os.environ.get(
-        "TGVK_TRUSTED_HOSTS",
-        f"localhost,127.0.0.1,{DEFAULT_PUBLIC_HOST}",
-    )
+    raw = os.environ.get("TGVK_TRUSTED_HOSTS", "localhost,127.0.0.1")
     return [h.strip() for h in raw.split(",") if h.strip()]
 
 
@@ -62,7 +57,7 @@ def public_panel_url() -> str:
     if env:
         return env
     if is_production():
-        return DEFAULT_PUBLIC_URL
+        raise RuntimeError("Set TGVK_PUBLIC_URL for production mode")
     return LOCAL_PANEL_URL
 
 

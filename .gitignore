@@ -15,6 +15,7 @@ serv/data/
 
 # Secrets (never commit)
 .env
-.env.*
+.env.local
+!.env.example
 config.json
 

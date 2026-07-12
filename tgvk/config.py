@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
 from pydantic import BaseModel, model_validator
 
-from tgvk.telegram_defaults import TELEGRAM_DESKTOP_API_HASH, TELEGRAM_DESKTOP_API_ID
+from tgvk.telegram_defaults import telegram_api_hash_from_env, telegram_api_id_from_env
 
 CONFIG_DIR = Path.home() / ".config" / "tgvk"
 CONFIG_FILE = CONFIG_DIR / "config.json"
@@ -14,8 +15,8 @@ CONFIG_FILE = CONFIG_DIR / "config.json"
 
 class AppConfig(BaseModel):
     telegram_session: str = ""
-    telegram_api_id: int = TELEGRAM_DESKTOP_API_ID
-    telegram_api_hash: str = TELEGRAM_DESKTOP_API_HASH
+    telegram_api_id: int = 0
+    telegram_api_hash: str = ""
     vk_token: str = ""
     vk_peer_id: int = 0
     img_mode: bool = False
@@ -29,12 +30,15 @@ class AppConfig(BaseModel):
     forwarding: bool = True
 
     @model_validator(mode="after")
-    def _apply_telegram_defaults(self) -> AppConfig:
-        wrong_hash = "b18441a1ff607e10a989921a7cbcc0"
+    def _apply_env_defaults(self) -> AppConfig:
         if not self.telegram_api_id:
-            self.telegram_api_id = TELEGRAM_DESKTOP_API_ID
-        if not self.telegram_api_hash or self.telegram_api_hash == wrong_hash:
-            self.telegram_api_hash = TELEGRAM_DESKTOP_API_HASH
+            env_id = telegram_api_id_from_env()
+            if env_id is not None:
+                self.telegram_api_id = env_id
+        if not self.telegram_api_hash:
+            env_hash = telegram_api_hash_from_env()
+            if env_hash:
+                self.telegram_api_hash = env_hash
         return self
 
     @classmethod
@@ -58,6 +62,10 @@ class AppConfig(BaseModel):
         missing: list[str] = []
         if not self.telegram_session:
             missing.append("telegram_session")
+        if not self.telegram_api_id:
+            missing.append("telegram_api_id")
+        if not self.telegram_api_hash:
+            missing.append("telegram_api_hash")
         if not self.resolved_vk_token(default_vk_token):
             missing.append("vk_token")
         if not self.vk_peer_id:

@@ -161,8 +161,11 @@ class VkSessionGuard:
             await self._send(vk_peer_id, relogin_message(), user)
             return
 
+        cfg = user.to_app_config(default_vk_token())
         valid = await is_telegram_session_valid(
             user.telegram_session,
+            api_id=cfg.telegram_api_id,
+            api_hash=cfg.telegram_api_hash,
             cache_key=user.id,
         )
         if not valid:

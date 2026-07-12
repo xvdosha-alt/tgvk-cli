@@ -24,12 +24,22 @@ tgvk run
 
 ### Telegram
 
-Используются креды **Telegram Desktop** (встроены, ничего регистрировать не надо):
+1. Создай приложение на [my.telegram.org/apps](https://my.telegram.org/apps) и получи `api_id` / `api_hash`.
+2. Задай их через env или конфиг:
 
-- `api_id`: 2040
-- `api_hash`: `b18441a1ff607e10a989891a5462e627`
+```bash
+export TGVK_TELEGRAM_API_ID=123456
+export TGVK_TELEGRAM_API_HASH=your_api_hash
+```
 
-1. Получи session string:
+или:
+
+```bash
+tgvk config set telegram_api_id 123456
+tgvk config set telegram_api_hash "your_api_hash"
+```
+
+3. Получи session string:
 
 ```bash
 python scripts/export_session.py

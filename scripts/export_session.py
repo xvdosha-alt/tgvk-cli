@@ -17,13 +17,14 @@ from telethon.sessions import StringSession
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from tgvk.telegram_defaults import (
-    TELEGRAM_DESKTOP_API_HASH,
-    TELEGRAM_DESKTOP_API_ID,
     TELEGRAM_DESKTOP_APP_VERSION,
     TELEGRAM_DESKTOP_DEVICE,
     TELEGRAM_DESKTOP_LANG,
     TELEGRAM_DESKTOP_SYSTEM,
     TELEGRAM_DESKTOP_SYSTEM_LANG,
+    resolve_telegram_credentials,
+    telegram_api_hash_from_env,
+    telegram_api_id_from_env,
 )
 
 
@@ -42,11 +43,12 @@ def _normalize_phone(phone: str) -> str:
 
 
 async def main() -> None:
-    api_id = TELEGRAM_DESKTOP_API_ID
-    api_hash = TELEGRAM_DESKTOP_API_HASH
+    env_id = telegram_api_id_from_env()
+    env_hash = telegram_api_hash_from_env()
+    api_id = env_id if env_id is not None else int(_prompt("Telegram api_id"))
+    api_hash = env_hash or _prompt("Telegram api_hash")
 
     print("=== Telethon session string ===\n")
-    print(f"API: Telegram Desktop (id={api_id})\n")
 
     phone = _normalize_phone(_prompt("Номер телефона (+79991234567)"))
     if not phone:
@@ -99,6 +101,11 @@ async def main() -> None:
     print("\n" + "=" * 50)
     print("\nДля tgvk:")
     print(f'  tgvk config set telegram_session "{session_string}"')
+    resolved_id, resolved_hash = resolve_telegram_credentials(api_id, api_hash)
+    if resolved_id:
+        print(f"  tgvk config set telegram_api_id {resolved_id}")
+    if resolved_hash:
+        print(f'  tgvk config set telegram_api_hash "{resolved_hash}"')
 
     await client.disconnect()
 

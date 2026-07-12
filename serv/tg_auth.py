@@ -20,13 +20,12 @@ from telethon.tl.custom import QRLogin
 from serv.security import GENERIC_AUTH_ERROR
 from serv.user_store import PendingAuth, UserStore
 from tgvk.telegram_defaults import (
-    TELEGRAM_DESKTOP_API_HASH,
-    TELEGRAM_DESKTOP_API_ID,
     TELEGRAM_DESKTOP_APP_VERSION,
     TELEGRAM_DESKTOP_DEVICE,
     TELEGRAM_DESKTOP_LANG,
     TELEGRAM_DESKTOP_SYSTEM,
     TELEGRAM_DESKTOP_SYSTEM_LANG,
+    resolve_telegram_credentials,
 )
 
 logger = logging.getLogger(__name__)
@@ -36,11 +35,17 @@ def normalize_phone(phone: str) -> str:
     return "".join(phone.split())
 
 
-def _make_client(session: str) -> TelegramClient:
+def _make_client(session: str, *, api_id: int = 0, api_hash: str = "") -> TelegramClient:
+    resolved_id, resolved_hash = resolve_telegram_credentials(api_id, api_hash)
+    if not resolved_id or not resolved_hash:
+        raise RuntimeError(
+            "Telegram API credentials are not configured. "
+            "Set TGVK_TELEGRAM_API_ID and TGVK_TELEGRAM_API_HASH."
+        )
     return TelegramClient(
         StringSession(session),
-        TELEGRAM_DESKTOP_API_ID,
-        TELEGRAM_DESKTOP_API_HASH,
+        resolved_id,
+        resolved_hash,
         device_model=TELEGRAM_DESKTOP_DEVICE,
         system_version=TELEGRAM_DESKTOP_SYSTEM,
         app_version=TELEGRAM_DESKTOP_APP_VERSION,

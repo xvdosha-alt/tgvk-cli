@@ -256,6 +256,8 @@ class BridgeService:
         if self.web_panel:
             valid = await is_telegram_session_valid(
                 self.config.telegram_session,
+                api_id=self.config.telegram_api_id,
+                api_hash=self.config.telegram_api_hash,
                 cache_key=f"bridge-{self.config.vk_peer_id}",
             )
             if not valid:

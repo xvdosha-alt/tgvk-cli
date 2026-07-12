@@ -36,11 +36,21 @@ def init_cmd() -> None:
     cfg = AppConfig.load()
 
     console.print(
-        "\n[dim]Telegram API: Telegram Desktop (2040) — уже встроено[/dim]\n"
+        "\n[dim]Telegram API: получи api_id/api_hash на https://my.telegram.org/apps[/dim]\n"
+        "[dim]Или задай TGVK_TELEGRAM_API_ID и TGVK_TELEGRAM_API_HASH в окружении[/dim]\n"
         "[dim]Session string: scripts/export_session.py или вставь готовый[/dim]\n"
         "[dim]VK token: токен сообщества с правами messages[/dim]\n"
         "[dim]VK peer_id: твой user id (например 123456789)[/dim]\n"
     )
+
+    if not cfg.telegram_api_id:
+        raw_id = Prompt.ask("Telegram api_id", default=None)
+        if raw_id:
+            cfg.telegram_api_id = int(raw_id)
+    if not cfg.telegram_api_hash:
+        api_hash = Prompt.ask("Telegram api_hash", default=None, password=True)
+        if api_hash:
+            cfg.telegram_api_hash = api_hash
 
     session = Prompt.ask(
         "Telegram session string",
