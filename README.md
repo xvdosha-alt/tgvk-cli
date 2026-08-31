@@ -1,16 +1,18 @@
-# tgvk
+EN | [RU](docs/README_RU.md)
 
-CLI-клиент: все входящие сообщения из Telegram дублируются в VK, управление — короткими командами в VK.
+## tgvk 🔗
 
-## Что умеет
+CLI client: all incoming Telegram messages are mirrored to VK, controlled via short commands in VK.
 
-- Подключение по **Telegram session string** (Telethon `StringSession`)
-- Пересылка входящих в VK с указанием **кто** и **откуда** написал
-- Локальная **история** в SQLite
-- **Img mode** — новые сообщения приходят как картинка чата
-- Управление через VK-бота короткими командами
+## ✨ Features
 
-## Быстрый старт
+- Connect via **Telegram session string** (Telethon `StringSession`)
+- Forward incoming messages to VK with **who** and **where** they wrote from
+- Local **history** in SQLite
+- **Img mode** - new messages arrive as a chat screenshot
+- Control via VK bot short commands
+
+## 🚀 Quick start
 
 ```bash
 python -m venv .venv
@@ -20,44 +22,44 @@ tgvk init
 tgvk run
 ```
 
-## Настройка
+## ⚙️ Configuration
 
 ### Telegram
 
-1. Создай приложение на [my.telegram.org/apps](https://my.telegram.org/apps) и получи `api_id` / `api_hash`.
-2. Задай их через env или конфиг:
+1. Create an app at [my.telegram.org/apps](https://my.telegram.org/apps) and get `api_id` / `api_hash`.
+2. Set them via env or config:
 
 ```bash
 export TGVK_TELEGRAM_API_ID=123456
 export TGVK_TELEGRAM_API_HASH=your_api_hash
 ```
 
-или:
+or:
 
 ```bash
 tgvk config set telegram_api_id 123456
 tgvk config set telegram_api_hash "your_api_hash"
 ```
 
-3. Получи session string:
+3. Get session string:
 
 ```bash
 python scripts/export_session.py
 ```
 
-Введи номер и код — скрипт выведет строку.
+Enter phone number and code - the script prints the string.
 
 ### VK
 
-1. Создай сообщество → Управление → Работа с API → Создать ключ
-2. Включи права: **Сообщения сообщества**, **Управление сообществом**
-3. Включи **Сообщения сообщества** в настройках (раздел «Сообщения»)
-4. `vk_peer_id` — твой числовой user id (можно узнать через [@idvk_bot](https://vk.com/idvk_bot))
-5. Напиши боту любое сообщение, чтобы открыть диалог
+1. Create a community → Manage → API → Create key
+2. Enable permissions: **Community messages**, **Community management**
+3. Enable **Community messages** in settings (Messages section)
+4. `vk_peer_id` - your numeric user id (find via [@idvk_bot](https://vk.com/idvk_bot))
+5. Send the bot any message to open a dialog
 
-### Конфиг
+### Config file
 
-Файл: `~/.config/tgvk/config.json`
+File: `~/.config/tgvk/config.json`
 
 ```bash
 tgvk config show
@@ -65,58 +67,58 @@ tgvk config set img_mode true
 tgvk config set vk_peer_id 123456789
 ```
 
-## Команды VK-бота
+## 📋 VK bot commands
 
-| Команда | Описание |
-|---------|----------|
-| `ст` | Статус |
-| `ист` | Последние 20 сообщений из БД |
-| `ист <chat_id> 30` | 30 сообщений из чата |
-| `чат` | Список недавних чатов |
-| `img` | Картинка последних сообщений |
-| `img <chat_id> 15` | Картинка чата |
-| `img+` / `img-` | Вкл/выкл img mode |
-| `лимит 50` | Лимит для `ист` |
-| `отв @ivan текст` | Ответить в Telegram (reply в последний чат) |
-| `отв 123456789 текст` | Ответ по user id |
-| `лс 8973446217 привет` | Написать в личку (всегда ЛС) |
-| `лс @ivan привет` | ЛС по username |
-| `игнор @ivan` / `игнор 123` | Не пересылать сообщения юзера |
-| `анигнор @ivan` / `анигнор 123` | Снять игнор юзера |
-| `игнор` | Весь список игнора |
-| `стоп` / `старт` | Пауза / возобновить пересылку из TG |
-| `img+` / `img-` / `имг+` / `имг-` | Вкл/выкл img mode |
-| `групп+` / `групп-` | Игнор **всех** групп и супергрупп |
-| `канал+` / `канал-` | Игнор **всех** каналов |
-| `игнорчат -100123` | Игнор одного чата (опционально) |
-| `помощь` | Справка |
+| Command | Description |
+|---------|-------------|
+| `ст` | Status |
+| `ист` | Last 20 messages from DB |
+| `ист <chat_id> 30` | 30 messages from chat |
+| `чат` | Recent chat list |
+| `img` | Screenshot of last messages |
+| `img <chat_id> 15` | Chat screenshot |
+| `img+` / `img-` | Enable/disable img mode |
+| `лимит 50` | Limit for `ист` |
+| `отв @ivan текст` | Reply in Telegram (reply in last chat) |
+| `отв 123456789 текст` | Reply by user id |
+| `лс 8973446217 привет` | DM (always private) |
+| `лс @ivan привет` | DM by username |
+| `игнор @ivan` / `игнор 123` | Do not forward user messages |
+| `анигнор @ivan` / `анигнор 123` | Remove user from ignore |
+| `игнор` | Full ignore list |
+| `стоп` / `старт` | Pause / resume TG forwarding |
+| `img+` / `img-` / `имг+` / `имг-` | Enable/disable img mode |
+| `групп+` / `групп-` | Ignore **all** groups and supergroups |
+| `канал+` / `канал-` | Ignore **all** channels |
+| `игнорчат -100123` | Ignore one chat (optional) |
+| `помощь` | Help |
 
 ## CLI
 
 ```bash
-tgvk init          # интерактивная настройка
-tgvk run           # запуск моста
-tgvk run -v        # с подробными логами
-tgvk history -n 30 # история из БД без запуска моста
+tgvk init          # interactive setup
+tgvk run           # start bridge
+tgvk run -v        # verbose logs
+tgvk history -n 30 # history from DB without running bridge
 tgvk config show
 ```
 
-## Формат пересылки (текстовый режим)
+## 🎮 Forward format (text mode)
 
 ```
 📩 Иван Петров (@ivan)
 🆔 user:123456789 · chat:-100987654321
 📍 Рабочий чат · супергруппа
-————————————————————
+--------------------
 Привет, как дела?
 ```
 
 ## Img mode
 
-В режиме `img+` каждое новое сообщение рендерится как скриншот чата (тёмная тема) и отправляется фото в VK.
+In `img+` mode, each new message is rendered as a chat screenshot (dark theme) and sent as a photo to VK.
 
-## Заметки
+## Notes
 
-- Работает только с **входящими** сообщениями (то, что пишут тебе)
-- Session string хранится локально в `~/.config/tgvk/config.json` — не шарь файл
-- Для стабильной работы держи `tgvk run` запущенным (screen/tmux/systemd)
+- Works only with **incoming** messages (what people write to you)
+- Session string is stored locally in `~/.config/tgvk/config.json` - do not share the file
+- Keep `tgvk run` running for stable operation (screen/tmux/systemd)
